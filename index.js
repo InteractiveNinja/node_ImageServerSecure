@@ -33,6 +33,12 @@ app.post('/set', (req, res) => {
 
   let val = req.body.text
   let typ = req.body.typ
+  let pw = req.body.pw
+  
+  if(pw != config.get("pw")) {
+    res.redirect("/")
+    return 
+  }
   let html = Handlebars.compile(fs.readFileSync(path.join(__dirname + "/text.html"), "utf-8"))
   if (val == "ninja") {
     fs.copyFileSync(path.join(__dirname + "/error.png"), FILENAME)
