@@ -13,6 +13,9 @@ const bodyparser = require('body-parser')
 const FILENAME = path.join(__dirname + "/render/image.png")
 const templatePath = path.join(__dirname + "/templates/")
 
+app.use(express.static("public"))
+app.use(express.static("render"))
+
 app.use(bodyparser.urlencoded({ extended: false }))
 
 app.use(bodyparser.json())
@@ -20,6 +23,11 @@ app.use(bodyparser.json())
 app.get("/", (req, res) => {
 
     res.sendFile(FILENAME)
+})
+
+app.get("/show", (req, res) => {
+
+    res.sendFile(templatePath + "/show.html")
 })
 app.get("/good", (req, res) => {
 

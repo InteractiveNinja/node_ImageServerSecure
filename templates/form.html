@@ -5,20 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Setup Epaper</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
-    <form action="set" method="post">
-        <input type="text" name="text" required placeholder="Text oder Link" id=""><br>
-        <input type="radio" id="text" required name="typ" value="text">
-        <label for="male">Text</label><br>
-        <input type="radio" id="qr" required name="typ" value="qr">
-        <label for="female">QR Code</label><br>
-        <input type="radio" id="img" required name="typ" value="img">
-        <label for="female">Bild</label><br>
-        <input type="password" name="pw" required placeholder="PW" id="">
-        <button type="submit">Send</button>
-    </form>
+    <div class="center">
+        <form action="set" method="post">
+            <input type="text" name="text" required placeholder="Text oder Link" id=""><br>
+            <input type="radio" id="text" required name="typ" value="text">
+            <label>Text</label><br>
+            <input type="radio" id="qr" required name="typ" value="qr">
+            <label>QR Code</label><br>
+            <input type="radio" id="img" required name="typ" value="img">
+            <label>Bild</label><br>
+            <input type="password" pattern="[0-9]{4}" maxlength="4" name="pw" required placeholder="PW" id=""><br>
+            <button type="submit">Send</button>
+        </form>
+    </div>
 </body>
 
 </html>
