@@ -1,18 +1,31 @@
-const express = require('express')
-const app = express()
 const path = require('path')
+const http = require('http')
+const https = require('https')
+const fs = require('fs')
+const express = require('express')
 const nodeHtmlToImage = require('node-html-to-image')
 const conf = require("@interactiveninja/config-reader")
-const config = new conf.config(path.join(__dirname + "/config.json"))
-const PORT = config.get('port')
-const fs = require('fs')
 const Handlebars = require("handlebars");
 const QRCode = require('qrcode')
 const bodyparser = require('body-parser')
 
+
+const app = express()
+const config = new conf.config(path.join(__dirname + "/config.json"))
+
+// Holt Port aus der Config
+const PORT = config.get('port')
+
+// Path Konstante
 const FILENAME = path.join(__dirname + "/render/image.png")
 const templatePath = path.join(__dirname + "/templates/")
 
+// HTTPS Certificate
+const privateKey = fs.readFileSync(path.join(__dirname + "/cert/privkey.pem"));
+const certificate = fs.readFileSync(path.join(__dirname + "/cert/cert.pem"));
+
+
+// Static Folders
 app.use(express.static("public"))
 app.use(express.static("render"))
 
@@ -123,8 +136,7 @@ let createImage = (val, callback) => {
 }
 
 
-app.listen(PORT, () => {
-
-    console.log(`Server läuft auf Port ${PORT}`)
-
-})
+https.createServer({ key: privateKey,
+    cert: certificate}, app).listen(PORT, () =>{
+        console.log(`Server läuft auf Port ${PORT}`)
+  });
