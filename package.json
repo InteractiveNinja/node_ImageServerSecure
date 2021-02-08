@@ -5,7 +5,8 @@
     "main": "/dist/index.js",
     "scripts": {
         "start": "node ./dist",
-        "build": "tsc",
+        "build-linux": "mkdir ./dist && cp ./src/* ./dist/ && tsc ",
+        "build-win": "mkdir dist && Xcopy /E /I src\\* dist\\ && tsc",
         "dev": "nodemon ./src/index.ts"
     },
     "keywords": [],
