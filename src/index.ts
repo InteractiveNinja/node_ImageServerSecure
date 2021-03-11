@@ -1,30 +1,27 @@
-import {join} from 'path'
 import {createServer} from 'https'
 import express from 'express'
-import {createImage,createQR,createText} from './imageGenerator'
 import { json, urlencoded } from 'body-parser'
 import {config} from '@interactiveninja/config-reader'
 import { readFileSync } from 'fs'
 
 const app = express()
-const configManager = config(join(__dirname + "/config.json"))
+const configManager = config("config.json")
 
 // Holt Port aus der Config
 const PORT = configManager.get('port')
 
-// Path Konstante
-const templatePath = join(__dirname + "/templates/")
-const FILENAME = join(__dirname + "/render/image.png")
 
+const FILENAME = "public/render/image.png"
+const templatePath = "templates"
+const sendFileOptions = {"root":"."}
 
 // HTTPS Certificate
-const privateKey = readFileSync(join(__dirname + "/cert/privkey.pem"));
-const certificate = readFileSync(join(__dirname + "/cert/cert.pem"));
+const privateKey = readFileSync("cert/privkey.pem");
+const certificate = readFileSync("cert/cert.pem");
 
 
 // Static Folders
-app.use(express.static(join(__dirname +  "/public")))
-app.use(express.static(join(__dirname + "/render")))
+app.use(express.static(("public")))
 
 app.use(urlencoded({ extended: false }))
 
@@ -32,29 +29,17 @@ app.use(json())
 
 app.get("/", (req, res) => {
 
-    res.sendFile(FILENAME)
+    res.sendFile(FILENAME,sendFileOptions)
 })
 
 app.get("/show", (req, res) => {
 
-    res.sendFile(templatePath + "/show.html")
-})
-app.get("/good", (req, res) => {
-
-    res.sendFile(templatePath + "/good.html")
-})
-app.get("/error", (req, res) => {
-
-    res.sendFile(templatePath + "/error.html")
-})
-app.get("/error-pin", (req, res) => {
-
-    res.sendFile(templatePath + "/error-pin.html")
+    res.sendFile(templatePath + "/show.html",sendFileOptions)
 })
 
 app.get('/set', (req, res) => {
 
-    res.sendFile(templatePath + "form.html")
+    res.sendFile(templatePath + "/form.html",sendFileOptions)
 
 })
 
@@ -62,47 +47,16 @@ app.get('/set', (req, res) => {
 app.post('/set', (req, res) => {
 
     // Variabeln
-    let val = req.body.text
-    let typ = req.body.typ
+    let val =  req.body.text 
+    let typ =  req.body.typ
     let pw = req.body.pw
 
-    //Pin Prüfung
-    if (pw != configManager.get("pw")) {
-        res.redirect("/error-pin")
-        return
+    if(val != undefined || typ !=  undefined || pw != undefined) {
+        res.sendStatus(200)
     }
 
-    switch (typ) {
-        case "qr":
-            createQR(val, (err: any) => {
-                if (err) {
-                    res.redirect("error")
-                    return
-                }
-                res.redirect("/good")
-            })
-            break;
-        case "text":
-            createText(val, (err: any) => {
-                if (err) {
-                    res.redirect("/error")
-                    return
-                }
-                res.redirect("/good")
-            })
 
-            break;
-        case "img":
-            createImage(val, (err: any) => {
-                if (err) {
-                    res.redirect("/error")
-                    return
-                }
-                res.redirect("/good")
-            })
-            break;
-    }
-
+    
 })
 
 
