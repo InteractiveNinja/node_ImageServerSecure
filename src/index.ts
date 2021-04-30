@@ -16,9 +16,9 @@ const FILENAME = "public/render/image.png"
 const templatePath = "templates"
 const sendFileOptions = { "root": "." }
 
-// HTTPS Certificate
-const privateKey = readFileSync("cert/privkey.pem");
-const certificate = readFileSync("cert/cert.pem");
+// // HTTPS Certificate
+// const privateKey = readFileSync("cert/privkey.pem");
+// const certificate = readFileSync("cert/cert.pem");
 
 
 // Static Folders
@@ -114,9 +114,13 @@ let checkPW = (pw: string): Promise<void> => {
 }
 
 
-createServer({
-    key: privateKey,
-    cert: certificate
-}, app).listen(PORT, () => {
+// createServer({
+//     key: privateKey,
+//     cert: certificate
+// }, app).listen(PORT, () => {
+//     console.log(`Server läuft auf Port ${PORT}`)
+// });
+
+app.listen(PORT, () => {
     console.log(`Server läuft auf Port ${PORT}`)
-});
+})
